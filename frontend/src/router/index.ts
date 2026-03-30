@@ -1,8 +1,18 @@
+import CreateView from '@/views/CreateView.vue'
+import DeleteView from '@/views/DeleteView.vue'
+import ReadView from '@/views/ReadView.vue'
+import UpdateView from '@/views/UpdateView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [],
+  routes: [
+    {path: '/', name: 'create', component: CreateView},
+    {path: '/read', name: 'read', component: ReadView},
+    {path: '/update', name: 'update', component: UpdateView},
+    {path: '/delete', name: 'delete', component: DeleteView},
+
+  ],
 })
 
 export default router

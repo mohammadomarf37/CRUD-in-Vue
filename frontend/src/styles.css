@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import 'tailwindcss';
+@import "bootstrap-icons/font/bootstrap-icons.css";
+ 
+*{
+    font-family: 'inter', sans-serif;
+}
+
+:root{
+    --primary-color: #708993;
+    --secondary-color: #A1C2BD;
+    --font-color: #19183B;
+    --hover-color: #E7F2EF;
+}
+
+/* Create User */
+.nav-link{
+    @apply mr-5 hover:text-(--hover-color)  text-lg transition-colors duration-300;
+}
+.input-field{
+    @apply shadow appearance-none border border-(--font-color) rounded w-full py-2 px-3 text-(--font-color) leading-tight focus:outline-none;
+}
