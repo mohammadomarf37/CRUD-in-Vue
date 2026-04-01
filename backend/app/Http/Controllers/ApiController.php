@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class ApiController extends Controller
 {
     // Get Users
-    public function get_api(){
+    public function get_users(){
         $getUsers = User::all();
         return response()->json($getUsers, 200);
     }
@@ -33,6 +33,7 @@ class ApiController extends Controller
             'email' => $request->email,
             'password' => $request->password
         ]);
+        return response()->json(['message' => 'User created successfully!'], 201);
     }
 
     // Update User

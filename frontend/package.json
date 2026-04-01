@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.2",
+    "axios": "^1.14.0",
     "bootstrap-icons": "^1.13.1",
     "tailwindcss": "^4.2.2",
     "vue": "^3.5.30",

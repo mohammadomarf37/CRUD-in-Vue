@@ -15,7 +15,7 @@
 
 /* Create User */
 .nav-link{
-    @apply mr-5 hover:text-(--hover-color)  text-lg transition-colors duration-300;
+    @apply mr-7 hover:text-(--hover-color)  text-[1.05rem] transition-colors duration-300;
 }
 .input-field{
     @apply shadow appearance-none border border-(--font-color) rounded w-full py-2 px-3 text-(--font-color) leading-tight focus:outline-none;
