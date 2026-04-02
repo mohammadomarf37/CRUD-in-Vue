@@ -3,7 +3,7 @@
     <div class="text-2xl py-4 px-6 bg-(--secondary-color)  text-center font-bold uppercase">
       Create User
     </div>
-    <form class="py-5 px-6" @submit.prevent="createUser()">
+    <form class="py-5 px-6" @submit.prevent="updateUser()">
       <p v-if="successMessage.length > 0" class="text-sm mb-5 text-green-500 bg-green-200 inline-block px-2 py-1 rounded-sm">{{ successMessage }}</p>
       <p v-if="errorMessage.length > 0" class="text-sm mb-5 text-red-500 bg-red-200 inline-block px-2 py-1 rounded-sm">{{ errorMessage }}</p>
       <div class="mb-4">
@@ -14,7 +14,7 @@
           type="text"
           @input="errorMessage = ''"
           placeholder="Enter your name"
-          v-model="newUser.name"
+          v-model="user.name"
         />
       </div>
       <div class="mb-4">
@@ -25,7 +25,7 @@
           type="email"
           @input="errorMessage = ''"
           placeholder="Enter your email"
-          v-model="newUser.email"
+          v-model="user.email"
         />
       </div>
       <div class="mb-4 relative">
@@ -36,7 +36,7 @@
           :type="isPasswordVisible ? 'text' : 'password'"
           @input="errorMessage = ''"
           placeholder="Enter your password"
-          v-model="newUser.password"
+          v-model="user.password"
         />
         <div 
             @click="togglePassword()"
@@ -56,11 +56,11 @@
       </div> -->
       <div class="flex items-center justify-center mb-4">
         <button
-          class="py-2 px-4 rounded hover:bg-(--primary-color) hover:text-(--hover-color) font-semibold focus:outline-none focus:shadow-outline transition-all duration-300 "
-          :class="isCreating ? 'bg-(--primary-color) text-(--hover-color) pointer-events-none' : 'bg-(--secondary-color) text-(--font-color) cursor-pointer'"
+          class="py-2 px-4 rounded hover:bg-(--primary-color) hover:text-(--hover-color) font-semibold focus:outline-none focus:shadow-outline transition-all duration-300"
+          :class="isUpdating ? 'bg-(--primary-color) text-(--hover-color) pointer-events-none' : 'bg-(--secondary-color) text-(--font-color) cursor-pointer'"
         >
-          {{ isCreating ? 'Creating...' : 'Create User' }}
-          <i v-if="isCreating" class="bi bi-hourglass-split animate-spin inline-block"></i>
+          {{ isUpdating ? 'Updating...' : 'Update User' }}
+          <i v-if="isUpdating" class="bi bi-hourglass-split animate-spin inline-block"></i>
         </button>
       </div>
     </form>
@@ -68,58 +68,74 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import router from '@/router';
+import { useRoute } from 'vue-router';
 
-const newUser = ref({
+const user = ref({
   name: '',
   email: '',
-  password: ''
+  password: '',
 });
-const isCreating = ref(false);
-const isPasswordVisible = ref(false);
+const isUpdating = ref(false);
 const successMessage = ref('');
 const errorMessage = ref('');
+const isPasswordVisible = ref(false);
+const route = useRoute();
+const userId = route.params.id;
+
+// Get User by ID
+async function getUserById() {
+    try{
+        const response = await axios.get(`http://localhost:8000/api/get/${userId}/user`);
+        user.value = response.data;
+    }
+    catch(error){
+        console.error("Error: ", error);
+    }
+}
 
 // Toggle Password
 function togglePassword(){
     isPasswordVisible.value = !isPasswordVisible.value;
 }
 
-// Create User
-async function createUser() {
-  try{
-    isCreating.value = true;
+// Update User
+async function  updateUser() {
+    try{
+        isUpdating.value = true;
 
-    // Validation
-    if(!newUser.value.name || !newUser.value.email || !newUser.value.password){
-      errorMessage.value = 'Please fill all the fields';
-      setTimeout(() => {
-        errorMessage.value = '';
-      }, 3000);
-      return;
+        // Validation
+        if(!user.value.name || !user.value.email || !user.value.password){
+          errorMessage.value = 'Please fill all the fields';
+          setTimeout(() => {
+            errorMessage.value = '';
+          }, 3000);
+          return;
+        }
+
+        const response = await axios.put(`http://localhost:8000/api/update/${userId}/user`, user.value);
+        successMessage.value = response.data.message;
+        setTimeout(() => {
+          successMessage.value = '';
+          router.push('/read');
+        }, 1000);
     }
-    
-    const response = await axios.post('http://localhost:8000/api/create/user', newUser.value);
-    newUser.value = { name: '', email: '', password: '' };
-    successMessage.value = response.data.message;
-    setTimeout(() => {
-      successMessage.value = '';
-      router.push('/read');
-    }, 1000);
-  }
-  catch (error){
-    console.error('Error', error);
-    errorMessage.value = error.response?.data?.error;
-    setTimeout(() => {
-      errorMessage.value = '';
-    }, 3000);
-  }
-  finally{
-    isCreating.value = false;
-  }
+    catch(error){
+        console.error("Error: ", error.response?.data?.error);
+        errorMessage.value = error.response?.data?.error;
+        setTimeout(() => {
+          errorMessage.value = '';
+        }, 2000);
+    }
 }
+
+onMounted(() => {
+    getUserById();
+});
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

@@ -14,7 +14,7 @@ class ApiController extends Controller
     }
 
     // Get User By ID
-    public function get_by_id($id){
+    public function get_user_by_id($id){
         $getUser = User::find($id);
         if(!$getUser){
             return response()->json(['error' => 'User not found!'], 404);
