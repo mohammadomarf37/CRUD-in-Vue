@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-md mx-auto my-20 bg-white shadow-lg rounded-lg overflow-hidden text-(--font-color)">
     <div class="text-2xl py-4 px-6 bg-(--secondary-color)  text-center font-bold uppercase">
-      Create User
+      Edit User
     </div>
     <form class="py-5 px-6" @submit.prevent="updateUser()">
       <p v-if="successMessage.length > 0" class="text-sm mb-5 text-green-500 bg-green-200 inline-block px-2 py-1 rounded-sm">{{ successMessage }}</p>
