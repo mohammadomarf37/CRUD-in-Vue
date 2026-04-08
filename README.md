@@ -26,8 +26,8 @@ A professional, type-safe CRUD application built with a focus on modular archite
 ### 2. Backend (Laravel)
 Navigate to the `backend` directory:
 
-composer install
-cp .env.example .env
+- composer install
+- cp .env.example .env
 # Update your DB_DATABASE, DB_USERNAME, and DB_PASSWORD in .env
 php artisan key:generate
 php artisan serve
